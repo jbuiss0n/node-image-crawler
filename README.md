@@ -3,7 +3,7 @@
 node-image-crawler
 ===============
 
-> A node.js iweb image crawler.
+> A node.js web image crawler.
 
 Requirements
 ------------
