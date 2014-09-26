@@ -45,6 +45,10 @@ app.get('/jobs/:id', function (req, res, next) {
   }
 });
 
+app.get('/hello', function (req, res, next) {
+  res.send('Hello World !!!');
+});
+
 app.get('/', express.static(__dirname + '/static'));
 
 app.get('*', function (req, res, next) {
