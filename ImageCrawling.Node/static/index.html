@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+</head>
+<body ng-app="app" class="container">
+  <h1>Image Crawling</h1>
+
+  <div class="row" ng-controller="MainController">
+    <div class="col-md-3">
+
+      <div class="panel panel-default">
+        <div class="panel-heading">Create new job</div>
+        <div class="panel-body">
+          <form ng-submit="onCreate()">
+            <div class="form-group">
+              <input type="url" class="form-control" placeholder="http://..." ng-model="url1" />
+            </div>
+            <div class="form-group">
+              <input type="url" class="form-control" placeholder="http://..." ng-model="url2" />
+            </div>
+            <div class="form-group">
+              <input type="url" class="form-control" placeholder="http://..." ng-model="url3" />
+            </div>
+            <div class="form-group">
+              <input type="submit" value="Create" class="btn btn-sm btn-primary" />
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <span>Job lists</span>
+          <span class="btn btn-xs btn-default pull-right" ng-click="onRefresh()"><span class="glyphicon glyphicon-refresh"></span></span>
+        </div>
+        <div class="panel-body">
+          <ul class="list-group">
+            <li class="list-group-item" ng-repeat="job in jobs">
+              <span>{{ job.id }} - {{ job.status }}</span>
+              <span ng-show="{{ job.status === 'finish' }}" class="btn btn-xs btn-default pull-right" ng-click="onSelect(job)"><span class="glyphicon glyphicon-arrow-right"></span></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-7" ng-show="!!job">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <span>Selected Job : {{ job.id }}</span>
+          <span class="btn btn-xs btn-default pull-right" ng-click="onClose()"><span class="glyphicon glyphicon-remove"></span></span>
+        </div>
+        <div class="panel-body">
+          <div ng-repeat="result in job.results">
+            <h3>
+              <span class="btn btn-sm btn-default" ng-click="result.collapse = !result.collapse">
+                <span ng-class="{ 'glyphicon-chevron-down' : !result.collapse, 'glyphicon-chevron-right': !!result.collapse }" class="glyphicon"></span>
+              </span>
+              <span>{{ result.url }}</span>
+            </h3>
+            <div class="list-group" ng-hide="!!result.collapse">
+              <a class="list-group-item" ng-repeat="img in result.imgs" ng-href="{{ img }}" target="_blank">
+                <span>{{ img }}</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
+  <script>
+    'use strict';
+    angular.module('app', [])
+      .controller('MainController', function ($scope, $http) {
+        $scope.job = null;
+
+        $scope.onCreate = function () {
+          var urls = [];
+          if ($scope.url1) urls.push($scope.url1);
+          if ($scope.url2) urls.push($scope.url2);
+          if ($scope.url3) urls.push($scope.url3);
+
+          $http.post('/jobs', urls).success(function (job) {
+            console.log(job);
+            $scope.url1 = '';
+            $scope.url2 = '';
+            $scope.url3 = '';
+          });
+        };
+
+        $scope.onRefresh = function () {
+          $http.get('/jobs').success(function (jobs) {
+            $scope.jobs = jobs;
+          });
+        };
+
+        $scope.onSelect = function (job) {
+          $scope.job = job;
+        };
+
+        $scope.onClose = function () {
+          $scope.job = null;
+        };
+
+        $scope.onRefresh();
+      });
+  </script>
+</body>
+</html>
