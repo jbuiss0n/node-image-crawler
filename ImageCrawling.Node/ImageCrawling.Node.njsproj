@@ -31,7 +31,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="crawler.js" />
-    <Compile Include="downloader.js" />
     <Compile Include="job-manager.js" />
     <Compile Include="server.js" />
     <Content Include="package.json" />

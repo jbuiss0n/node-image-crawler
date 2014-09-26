@@ -41,7 +41,7 @@
           <ul class="list-group">
             <li class="list-group-item" ng-repeat="job in jobs">
               <span>{{ job.id }} - {{ job.status }}</span>
-              <span ng-show="{{ job.status === 'finish' }}" class="btn btn-xs btn-default pull-right" ng-click="onSelect(job)"><span class="glyphicon glyphicon-arrow-right"></span></span>
+              <span class="btn btn-xs btn-default pull-right" ng-click="onSelect(job)"><span class="glyphicon glyphicon-arrow-right"></span></span>
             </li>
           </ul>
         </div>
@@ -55,16 +55,19 @@
           <span class="btn btn-xs btn-default pull-right" ng-click="onClose()"><span class="glyphicon glyphicon-remove"></span></span>
         </div>
         <div class="panel-body">
-          <div ng-repeat="result in job.results">
+          <div ng-repeat="page in job.pages">
             <h3>
               <span class="btn btn-sm btn-default" ng-click="result.collapse = !result.collapse">
                 <span ng-class="{ 'glyphicon-chevron-down' : !result.collapse, 'glyphicon-chevron-right': !!result.collapse }" class="glyphicon"></span>
               </span>
-              <span>{{ result.url }}</span>
+              <span>{{ page.url }}</span>
             </h3>
             <div class="list-group" ng-hide="!!result.collapse">
-              <a class="list-group-item" ng-repeat="img in result.imgs" ng-href="{{ img }}" target="_blank">
-                <span>{{ img }}</span>
+              <a class="list-group-item" ng-repeat="image in page.images" ng-href="{{ image.src }}" target="_blank">
+                <span ng-show="image.status === 'downloading'" class="glyphicon glyphicon-download-alt"></span>
+                <span ng-show="image.status === 'downloaded'" class="glyphicon glyphicon-ok"></span>
+                <span ng-show="image.status === 'error'" class="glyphicon glyphicon-warning-sign"></span>
+                <span>{{ image.src }}</span>
               </a>
             </div>
           </div>
@@ -90,7 +93,7 @@
           if ($scope.url3) urls.push($scope.url3);
 
           $http.post('/jobs', urls).success(function (job) {
-            console.log(job);
+            $scope.onRefresh();
             $scope.url1 = '';
             $scope.url2 = '';
             $scope.url3 = '';
@@ -104,7 +107,9 @@
         };
 
         $scope.onSelect = function (job) {
-          $scope.job = job;
+          $http.get('/jobs/' + job.id).success(function (job) {
+            $scope.job = job;
+          });
         };
 
         $scope.onClose = function () {
