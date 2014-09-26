@@ -1,6 +1,5 @@
 node_modules
 obj
-bin
 files
 *.suo
 .ntvs_analysis.dat
