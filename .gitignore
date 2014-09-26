@@ -1,6 +1,6 @@
-ImageCrawling.Node/node_modules
-ImageCrawling.Node/obj
-ImageCrawling.Node/bin
-ImageCrawling.Node/files
+node_modules
+obj
+bin
+files
 *.suo
 .ntvs_analysis.dat
