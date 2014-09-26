@@ -45,8 +45,35 @@ app.get('/jobs/:id', function (req, res, next) {
   }
 });
 
-app.get('/hello', function (req, res, next) {
-  res.send('Hello World !!!');
+app.get('/jobs/:id/pages/:page', function (req, res, next) {
+  var id = req.param('id');
+  var page = req.param('page');
+
+  var job = jobManager.getJob(id);
+
+  if (!job || page >= job.pages.length) {
+    res.status(404).send('404 Not Found');
+  }
+  else {
+    res.status(200).send(job.pages[page]);
+  }
+});
+
+// an other possibility here is to directly pipe the current request to another request pointing at the image location
+app.get('/jobs/:id/pages/:page/images/:image', function (req, res, next) {
+  var id = req.param('id');
+  var page = req.param('page');
+  var image = req.param('image');
+
+  var job = jobManager.getJob(id);
+  
+  if (!job || page >= job.pages.length || image >= job.pages[page].images.length) {
+    res.status(404).send('404 Not Found');
+  }
+  else {
+    res.writeHead(301, { 'Location': job.pages[page].images[image].src });
+    res.end();
+  }
 });
 
 app.get('/', express.static(__dirname + '/static'));
