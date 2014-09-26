@@ -63,7 +63,7 @@
               <span>{{ page.url }}</span>
             </h3>
             <div class="list-group" ng-hide="!!result.collapse">
-              <a class="list-group-item" ng-repeat="image in page.images" ng-href="{{ image.src }}" target="_blank">
+              <a class="list-group-item" ng-repeat="image in page.images" ng-href="{{ '/jobs/' + job.id + '/pages/' + $parent.$index + '/images/' +$index }}" target="_blank">
                 <span ng-show="image.status === 'downloading'" class="glyphicon glyphicon-download-alt"></span>
                 <span ng-show="image.status === 'downloaded'" class="glyphicon glyphicon-ok"></span>
                 <span ng-show="image.status === 'error'" class="glyphicon glyphicon-warning-sign"></span>
