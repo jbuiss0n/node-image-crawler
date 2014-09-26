@@ -60,6 +60,6 @@ app.delete('*', function (req, res, next) {
   res.status(405).send('405 Not Allowed');
 });
 
-http.createServer(app).listen(PORT, function () {
-  console.log('Express server listening on port ' + PORT);
+http.createServer(app).listen(port, function () {
+  console.log('Express server listening on port ' + port);
 });
