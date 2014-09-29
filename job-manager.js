@@ -12,7 +12,7 @@ var JobManager = function () {
 JobManager.prototype.queueNewJob = function (urls, callback) {
   var self = this, id;
   
-  if (!util.isArray(urls)) return callback(new Error('urls must be and Array of urls'));
+  if (!util.isArray(urls) || urls.length === 0) return callback(new Error('urls must be and Array of urls'));
   
   id = Date.now();
   self._jobs[id] = self._createJob(id, urls);
