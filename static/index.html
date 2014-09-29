@@ -60,6 +60,9 @@
               <span class="btn btn-sm btn-default" ng-click="result.collapse = !result.collapse">
                 <span ng-class="{ 'glyphicon-chevron-down' : !result.collapse, 'glyphicon-chevron-right': !!result.collapse }" class="glyphicon"></span>
               </span>
+              <span ng-show="image.status === 'crawling'" class="glyphicon glyphicon-download-alt"></span>
+              <span ng-show="image.status === 'finish'" class="glyphicon glyphicon-ok"></span>
+              <span ng-show="image.status === 'error'" class="glyphicon glyphicon-warning-sign"></span>
               <span>{{ page.url }}</span>
             </h3>
             <div class="list-group" ng-hide="!!result.collapse">
